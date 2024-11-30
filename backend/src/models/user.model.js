@@ -3,6 +3,10 @@ import mongoose from "mongoose";
 // Create schema
 const userSchema = new mongoose.Schema(
   {
+    profileImage: {
+      type: String,
+      default: null,
+    },
     username: {
       type: String,
       required: [true, "Username is required"],
@@ -25,12 +29,14 @@ const userSchema = new mongoose.Schema(
     },
     firstName: {
       type: String,
+      minlength: [3, "Username must be at least 3 characters long"],
       required: [true, "First name is required"],
       trim: true,
       maxlength: [50, "First name must not exceed 50 characters"],
     },
     lastName: {
       type: String,
+      minlength: [3, "Username must be at least 3 characters long"],
       required: [true, "Last name is required"],
       trim: true,
       maxlength: [50, "Last name must not exceed 50 characters"],
@@ -41,10 +47,12 @@ const userSchema = new mongoose.Schema(
       minlength: [8, "Password must be at least 8 characters long"],
       validate: {
         validator: function (v) {
-          return /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d@$!%*?&]{8,}$/.test(v); // At least 1 letter, 1 number, and 8 chars
+          return /^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[^A-Za-z\d])[A-Za-z\d\S]{8,}$/.test(
+            v
+          );
         },
         message:
-          "Password must contain at least one letter, one number, and be at least 8 characters long",
+          "Password must contain at least one uppercase letter, one lowercase letter, one number, and one special character",
       },
     },
     createdAt: {
